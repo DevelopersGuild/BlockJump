@@ -11,6 +11,8 @@ public class Player: MonoBehaviour
      private Vector3 movementDirection;
      private Rigidbody2D playerRigidBody;
      private int jumpCounter;
+     int min = -13;
+     int max = 13;
 
      void Start()
      {
@@ -32,7 +34,11 @@ public class Player: MonoBehaviour
      public void MobileMovement()
      {
           movementDirection = new Vector3(Input.acceleration.x, 0f, 0f);
-          movementDirection *= Speed;
+          if(movementDirection.sqrMagnitude > 1)
+          {
+               movementDirection.Normalize();
+          }
+          movementDirection *= (Speed * 5);
           foreach (Touch touch in Input.touches)
           {
                if (touch.phase == TouchPhase.Began)
@@ -57,7 +63,16 @@ public class Player: MonoBehaviour
 
      private void MovePlayer()
      {
+
           transform.Translate(movementDirection * Time.deltaTime);
+          if(transform.position.x > max)
+          {
+               transform.position = new Vector3(max, transform.position.y, 0);
+          }
+          if(transform.position.x < min)
+          {
+               transform.position = new Vector3(min, transform.position.y, 0);
+          }
      }
 
      private void JumpPlayer()
@@ -68,7 +83,6 @@ public class Player: MonoBehaviour
                jumpCounter++;
           }
      }
-
 
      public void OnCollisionEnter2D(Collision2D collision)
      {
