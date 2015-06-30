@@ -5,8 +5,8 @@ using System.Collections;
 public class Block : MonoBehaviour
 {
      public bool IsActive;
-     public int MaxSpeed;
      public int MinSpeed;
+     public int MaxSpeed;
      private float speed;
      private Vector3 movementDirection;
      private System.Random randomNumberGenerator;
