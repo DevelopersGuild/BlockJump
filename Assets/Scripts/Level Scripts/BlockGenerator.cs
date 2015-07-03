@@ -12,13 +12,14 @@ public class BlockGenerator : MonoBehaviour
      private System.Random randomNumberGenerator;
      private int randomBlock;
      private Player player;
+     private GameObject lastBlock;
      // Use this for initialization
      void Start()
      {
           player = FindObjectOfType<Player>();
           randomNumberGenerator = new System.Random();
           randomBlock = GetRandomBlockNumber();
-          spawnPoint = new Vector3(0, player.transform.position.y + 30, 0);
+          lastBlock = player.gameObject;
           for (int i = 0; i < NumberOfBlocks; i++)
           {
                BlockList.Add(Instantiate(BlockPrefab));
@@ -30,7 +31,7 @@ public class BlockGenerator : MonoBehaviour
      // Update is called once per frame
      void Update()
      {
-          if (counter < 100)
+          if (counter < 20)
           {
                counter++;
           }
@@ -41,9 +42,10 @@ public class BlockGenerator : MonoBehaviour
                if (BlockList[randomBlock].GetComponent<Block>().GetIsActive() == false)
                {
                     BlockList[randomBlock].GetComponent<Block>().SetIsActive(true);
-                    spawnPoint.x = randomSpawnPosistion;
+                    spawnPoint = new Vector3(randomSpawnPosistion, lastBlock.transform.position.y + 6, 0);
                     BlockList[randomBlock].transform.position = spawnPoint;
                     counter = 0;
+                    lastBlock = BlockList[randomBlock];
                }
           }
 

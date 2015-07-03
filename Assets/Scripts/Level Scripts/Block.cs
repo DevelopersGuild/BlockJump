@@ -15,10 +15,12 @@ public class Block : MonoBehaviour
      {
           randomNumberGenerator = new System.Random();
           speed = randomNumberGenerator.Next(MinSpeed, MaxSpeed);
+
      }
 
      void Update()
      {
+
           movementDirection = new Vector3(0, -speed, 0);
           transform.Translate(movementDirection * Time.deltaTime);
      }
@@ -36,7 +38,7 @@ public class Block : MonoBehaviour
 
      public void OnTriggerEnter2D(Collider2D collider)
      {
-          if(collider.tag == "Platform")
+          if(collider.tag == "Ground")
           {
                this.SetIsActive(false);
           }

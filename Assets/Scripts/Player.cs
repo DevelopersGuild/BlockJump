@@ -11,11 +11,14 @@ public class Player: MonoBehaviour
      private Vector3 movementDirection;
      private Rigidbody2D playerRigidBody;
      private int jumpCounter;
+     private float varaibleSpeed;
+     private bool isPlayerOffGround = false;
      int min = -13;
      int max = 13;
 
      void Start()
      {
+          varaibleSpeed = Speed;
           playerRigidBody = gameObject.GetComponent<Rigidbody2D>();
           jumpCounter = 0;
      }
@@ -28,6 +31,14 @@ public class Player: MonoBehaviour
           else
           {
                KeyBoardMovement();
+          }
+          if (isPlayerOffGround == false)
+          {
+               if (gameObject.transform.position.y > 4)
+               {
+                    GameManager.Events.CallEvent(EventManager.EventTypes.PlayerLeftGround);
+                    isPlayerOffGround = true;
+               }
           }
      }
 
@@ -89,7 +100,22 @@ public class Player: MonoBehaviour
           if (collision.gameObject.tag == "Platform")
           {
                ResetJumpCounter();
+               Speed = Speed / 2;
           }
+          if(collision.gameObject.tag == "Ground")
+          {
+               if (collision.gameObject.GetComponent<Ground>().GetDoesGroundKillPlayer() == true)
+               {
+                    GameManager.Events.CallEvent(EventManager.EventTypes.PlayerDeath);
+               }
+               ResetJumpCounter();
+               Speed = Speed / 2;
+          }
+     }
+
+     public void OnCollisionExit2D(Collision2D collision)
+     {
+          Speed = varaibleSpeed;
      }
 
      private void ResetJumpCounter()

@@ -1,15 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Ground : MonoBehaviour {
+public class Ground : MonoBehaviour, IListner
+{
+     private bool doesGroundKillsPlayer = false;
+     // Use this for initialization
+     void Start()
+     {
+          GameManager.Events.AddEventListner(this, EventManager.EventTypes.PlayerLeftGround);
+     }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+     // Update is called once per frame
+     void Update()
+     {
+
+     }
+
+     public bool GetDoesGroundKillPlayer()
+     {
+          return doesGroundKillsPlayer;
+     }
+
+     public void OnEventOccurred(EventManager.EventTypes eventType)
+     {
+          if(eventType == EventManager.EventTypes.PlayerLeftGround)
+          {
+               doesGroundKillsPlayer = true;
+          }
+     }
 }
