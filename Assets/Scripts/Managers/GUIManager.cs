@@ -18,6 +18,11 @@ public class GUIManager : MonoBehaviour
      {
           ScoreCanvas.enabled = true;
      }
+
+     public void HideScoreCanvas()
+     {
+          ScoreCanvas.enabled = false;
+     }
 }
 
 

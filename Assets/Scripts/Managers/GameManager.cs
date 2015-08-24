@@ -39,11 +39,6 @@ public class GameManager : MonoBehaviour
           GameManager.Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.PlayerDeath);
      }
 
-     // Update is called once per frame
-     void Update()
-     {
-
-     }
 
      public void SwitchLevel(int LevelNumber)
      {
@@ -52,7 +47,9 @@ public class GameManager : MonoBehaviour
 
      public void RestartLevel()
      {
-          Application.LoadLevel(Application.loadedLevel);
+          //this is the problem with the game not restarting...
+          //Find solution or restart level by reseting varaibles.
+          Application.LoadLevel(1);
      }
 
      public void ExitGame()

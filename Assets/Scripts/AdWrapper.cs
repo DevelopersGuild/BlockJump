@@ -31,11 +31,12 @@ public class AdWrapper
           #else
                string adUnitId = "unexpeted_platform";
           #endif
-
+          /*
           BannerView bannerView = new BannerView(AdUnitId, AdSize.Banner, AdPosition.Top);
           AdRequest request = new AdRequest.Builder().Build();
 
           bannerView.LoadAd(request);
+          */
 
      }
 }

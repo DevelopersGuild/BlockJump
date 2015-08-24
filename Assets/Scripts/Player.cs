@@ -123,6 +123,11 @@ public class Player: MonoBehaviour
           Speed = varaibleSpeed;
      }
 
+     public void SetIsPlayerDead(bool value)
+     {
+          isPlayerDead = value;
+     }
+
      private void ResetJumpCounter()
      {
           jumpCounter = 0;
