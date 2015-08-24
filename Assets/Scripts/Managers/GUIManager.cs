@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GUIManager : MonoBehaviour, IListner
+public class GUIManager : MonoBehaviour
 {
      public Canvas ScoreCanvas = null;
      // Use this for initialization
@@ -11,13 +11,7 @@ public class GUIManager : MonoBehaviour, IListner
           {
                ScoreCanvas.enabled = false;
           }
-          GameManager.Events.AddEventListner(this, EventManager.EventTypes.PlayerDeath);
-     }
-
-     // Update is called once per frame
-     void Update()
-     {
-
+          GameManager.Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.PlayerDeath);
      }
 
      public void OnEventOccurred(EventManager.EventTypes typeOfEvent)
@@ -25,3 +19,5 @@ public class GUIManager : MonoBehaviour, IListner
           ScoreCanvas.enabled = true;
      }
 }
+
+

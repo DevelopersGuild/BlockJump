@@ -2,23 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public interface IListner
-{
-     void OnEventOccurred(EventManager.EventTypes eventName);
-}
+
 public class EventManager : MonoBehaviour
 {
+     public delegate void Listener(EventManager.EventTypes eventType);
 
      public enum EventTypes { PlayerDeath, PlayerLeftGround };
 
-     private Dictionary<EventTypes, List<IListner>> eventList = new Dictionary<EventTypes,List<IListner>>();
-     // Use this for initialization
-     void Start()
-     {
+     private Dictionary<EventTypes, List<Listener>> eventList = new Dictionary<EventTypes,List<Listener>>();
 
-     }
-
-     public void AddEventListner(IListner listener, EventTypes eventName)
+     public void AddEventListner(Listener listener, EventTypes eventName)
      {
           if(eventList.ContainsKey(eventName) == true)
           {
@@ -26,7 +19,7 @@ public class EventManager : MonoBehaviour
           }
           else
           {
-               eventList.Add(eventName, new List<IListner>());
+               eventList.Add(eventName, new List<Listener>());
                eventList[eventName].Add(listener);
           }
      }
@@ -37,9 +30,9 @@ public class EventManager : MonoBehaviour
           {
                return;
           }
-          foreach(IListner eventListner in eventList[eventName])
+          foreach(Listener eventListner in eventList[eventName])
           {
-               eventListner.OnEventOccurred(eventName);
+               eventListner(eventName);
           }
      }
 }

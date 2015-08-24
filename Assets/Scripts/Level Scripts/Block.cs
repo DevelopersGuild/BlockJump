@@ -20,7 +20,6 @@ public class Block : MonoBehaviour
 
      void Update()
      {
-
           movementDirection = new Vector3(0, -speed, 0);
           transform.Translate(movementDirection * Time.deltaTime);
      }

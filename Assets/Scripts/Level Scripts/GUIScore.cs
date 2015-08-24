@@ -2,14 +2,14 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class GUIScore : MonoBehaviour, IListner
+public class GUIScore : MonoBehaviour
 {
      public Text Score;
      
      // Use this for initialization
      void Start()
      {
-          GameManager.Events.AddEventListner(this, EventManager.EventTypes.PlayerDeath);
+          GameManager.Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.PlayerDeath);
      }
 
      public void OnEventOccurred(EventManager.EventTypes eventType)

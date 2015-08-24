@@ -2,7 +2,7 @@
 using System.Collections;
 using GoogleMobileAds.Api;
 
-public class AdWrapper : MonoBehaviour
+public class AdWrapper
 {
 
      // Use this for initialization

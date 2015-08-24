@@ -13,6 +13,7 @@ public class Player: MonoBehaviour
      private int jumpCounter;
      private float varaibleSpeed;
      private bool isPlayerOffGround = false;
+     private bool isPlayerDead = false;
      int min = -13;
      int max = 13;
 
@@ -24,20 +25,23 @@ public class Player: MonoBehaviour
      }
      void Update()
      {
-          if(IsMobileControls == true)
+          if (isPlayerDead == false)
           {
-               MobileMovement();
-          }
-          else
-          {
-               KeyBoardMovement();
-          }
-          if (isPlayerOffGround == false)
-          {
-               if (gameObject.transform.position.y > 4)
+               if (IsMobileControls == true)
                {
-                    GameManager.Events.CallEvent(EventManager.EventTypes.PlayerLeftGround);
-                    isPlayerOffGround = true;
+                    MobileMovement();
+               }
+               else
+               {
+                    KeyBoardMovement();
+               }
+               if (isPlayerOffGround == false)
+               {
+                    if (gameObject.transform.position.y > 4)
+                    {
+                         GameManager.Events.CallEvent(EventManager.EventTypes.PlayerLeftGround);
+                         isPlayerOffGround = true;
+                    }
                }
           }
      }
@@ -107,6 +111,7 @@ public class Player: MonoBehaviour
                if (collision.gameObject.GetComponent<Ground>().GetDoesGroundKillPlayer() == true)
                {
                     GameManager.Events.CallEvent(EventManager.EventTypes.PlayerDeath);
+                    isPlayerDead = true;
                }
                ResetJumpCounter();
                Speed = Speed / 2;

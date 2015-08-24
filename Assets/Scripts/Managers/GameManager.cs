@@ -2,55 +2,41 @@
 using System.Collections;
 
 [RequireComponent(typeof(EventManager))]
-public class GameManager : MonoBehaviour, IListner
+public class GameManager : MonoBehaviour
 {
-     public static GameManager Instance
-     {
-          get
-          {
-               if (instance == null)
-               {
-                    instance = new GameObject("GameManager").AddComponent<GameManager>();
-               }
-               return instance;
-          }
-     }
-
-     public static EventManager Events
-     {
-          get
-          {
-               if(events == null)
-               {
-                    events = instance.GetComponent<EventManager>();
-               }
-               return events;
-          }
-     }
-
-     private static GameManager instance = null;
-     private static EventManager events = null;
+     public static GameManager Instance = null;
+     public static EventManager Events = null;
      AdWrapper adWrapper;
 
      void Awake()
      {
-          if ((instance) && (instance.GetInstanceID() != GetInstanceID()))
+          if (Instance == null)
+          {
+               Instance = gameObject.GetComponent<GameManager>();
+          }
+          if ((Instance) && (Instance.GetInstanceID() != GetInstanceID()))
           {
                DestroyImmediate(gameObject);
           }
           else
           {
-               instance = this;
+               Instance = this;
                DontDestroyOnLoad(gameObject);
+          }
+          if (Events == null)
+          {
+               Events = Instance.GetComponent<EventManager>();
           }
      }
 
      // Use this for initialization
      void Start()
      {
+          /*
           adWrapper = new AdWrapper();
           adWrapper.RequestBannerAd();
-          GameManager.Events.AddEventListner(this, EventManager.EventTypes.PlayerDeath);
+           * */
+          GameManager.Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.PlayerDeath);
      }
 
      // Update is called once per frame
