@@ -7,7 +7,7 @@ public class EventManager : MonoBehaviour
 {
      public delegate void Listener(EventManager.EventTypes eventType);
 
-     public enum EventTypes { PlayerDeath, PlayerLeftGround };
+     public enum EventTypes { PlayerDeath, PlayerLeftGround, RestartGame };
 
      private Dictionary<EventTypes, List<Listener>> eventList = new Dictionary<EventTypes,List<Listener>>();
 

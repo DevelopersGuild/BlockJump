@@ -12,11 +12,20 @@ public class GUIManager : MonoBehaviour
                ScoreCanvas.enabled = false;
           }
           GameManager.Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.PlayerDeath);
+          GameManager.Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.RestartGame);
      }
 
      public void OnEventOccurred(EventManager.EventTypes typeOfEvent)
      {
-          ScoreCanvas.enabled = true;
+          if(typeOfEvent == EventManager.EventTypes.PlayerDeath)
+          {
+               ScoreCanvas.enabled = true;
+          }
+          if(typeOfEvent == EventManager.EventTypes.RestartGame)
+          {
+               ScoreCanvas.enabled = false;
+          }
+          
      }
 
      public void HideScoreCanvas()

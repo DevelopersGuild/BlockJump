@@ -14,6 +14,7 @@ public class Player: MonoBehaviour
      private float varaibleSpeed;
      private bool isPlayerOffGround = false;
      private bool isPlayerDead = false;
+     private Vector3 playerStartPosistion;
      int min = -13;
      int max = 13;
 
@@ -22,6 +23,8 @@ public class Player: MonoBehaviour
           varaibleSpeed = Speed;
           playerRigidBody = gameObject.GetComponent<Rigidbody2D>();
           jumpCounter = 0;
+          playerStartPosistion = gameObject.transform.position;
+          GameManager.Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.RestartGame);
      }
      void Update()
      {
@@ -115,6 +118,14 @@ public class Player: MonoBehaviour
                }
                ResetJumpCounter();
                Speed = Speed / 2;
+          }
+     }
+
+     public void OnEventOccurred(EventManager.EventTypes eventType)
+     {
+          if (eventType == EventManager.EventTypes.RestartGame)
+          {
+               SetIsPlayerDead(false);
           }
      }
 

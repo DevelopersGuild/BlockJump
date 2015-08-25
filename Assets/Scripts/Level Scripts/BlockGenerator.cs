@@ -25,6 +25,7 @@ public class BlockGenerator : MonoBehaviour
                BlockList.Add(Instantiate(BlockPrefab));
                BlockList[i].GetComponent<Block>().SetIsActive(false);
           }
+          GameManager.Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.RestartGame);
 
      }
 
@@ -54,5 +55,18 @@ public class BlockGenerator : MonoBehaviour
      private int GetRandomBlockNumber()
      {
           return randomNumberGenerator.Next(0, NumberOfBlocks);
+     }
+
+     public void OnEventOccurred(EventManager.EventTypes eventType)
+     {
+          if(eventType == EventManager.EventTypes.RestartGame)
+          {
+               foreach(GameObject block in BlockList)
+               {
+                    block.SetActive(false);
+                    
+               }
+               lastBlock = player.gameObject;
+          }
      }
 }

@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
      {
           //this is the problem with the game not restarting...
           //Find solution or restart level by reseting varaibles.
-          Application.LoadLevel(1);
+          GameManager.Events.CallEvent(EventManager.EventTypes.RestartGame);
      }
 
      public void ExitGame()
