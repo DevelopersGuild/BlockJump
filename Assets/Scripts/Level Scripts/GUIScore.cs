@@ -4,28 +4,29 @@ using UnityEngine.UI;
 
 public class GUIScore : MonoBehaviour
 {
-     public Text Score;
-     
-     // Use this for initialization
-     void Start()
-     {
-          GameManager.Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.PlayerDeath);
-     }
+    public Text HighScore;
+    public Text Score;
 
-     public void OnEventOccurred(EventManager.EventTypes eventType)
-     {
-          if(eventType == EventManager.EventTypes.PlayerDeath)
-          {
-               Score.text = "Score " + CalculateScore().ToString();
-          }
-     }
-     
-     private int CalculateScore()
-     {
-          int score;
-          score = (int)Time.time * 10;
-          return score;
-     }
+    // Use this for initialization
+    void Start()
+    {
+        GameManager.Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.PlayerDeath);
+        HighScore.text = "High Score " + GameManager.LoadSave.GetScore().ToString();
+    }
+
+    public void OnEventOccurred(EventManager.EventTypes eventType)
+    {
+        if (eventType == EventManager.EventTypes.PlayerDeath)
+        {
+            if(GameManager.Instance.CalculateScore() > GameManager.LoadSave.GetScore())
+            {
+                HighScore.text = "New High Score! " + GameManager.Instance.CalculateScore().ToString();
+            }
+            Score.text = "Score " + GameManager.Instance.CalculateScore().ToString();
+        }
+        GameManager.Instance.SaveHighScore();
+    }
+
 
 
 }

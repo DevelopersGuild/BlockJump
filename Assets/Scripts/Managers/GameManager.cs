@@ -2,67 +2,136 @@
 using System.Collections;
 
 [RequireComponent(typeof(EventManager))]
+[RequireComponent(typeof(LoadAndSaveManager))]
 public class GameManager : MonoBehaviour
 {
-     public static GameManager Instance = null;
-     public static EventManager Events = null;
-     AdWrapper adWrapper;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new GameObject("GameManager").AddComponent<GameManager>();
+            }
+            return instance;
+        }
+    }
 
-     void Awake()
-     {
-          if (Instance == null)
-          {
-               Instance = gameObject.GetComponent<GameManager>();
-          }
-          if ((Instance) && (Instance.GetInstanceID() != GetInstanceID()))
-          {
-               DestroyImmediate(gameObject);
-          }
-          else
-          {
-               Instance = this;
-               DontDestroyOnLoad(gameObject);
-          }
-          if (Events == null)
-          {
-               Events = Instance.GetComponent<EventManager>();
-          }
-     }
+    public static EventManager Events
+    {
+        get
+        {
+            if (events == null)
+            {
+                events = instance.GetComponent<EventManager>();
+            }
+            return events;
+        }
+    }
 
-     // Use this for initialization
-     void Start()
-     {
-          /*
-          adWrapper = new AdWrapper();
-          adWrapper.RequestBannerAd();
-           * */
-          GameManager.Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.PlayerDeath);
-     }
+    public static LoadAndSaveManager LoadSave
+    {
+        get
+        {
+            if(loadSave == null)
+            {
+                loadSave = instance.GetComponent<LoadAndSaveManager>();
+            }
+            return loadSave;
+        }
+    }
+
+    void Awake()
+    {
+        if ((instance) && (instance.GetInstanceID() != GetInstanceID()))
+        {
+            DestroyImmediate(gameObject);
+        }
+        else
+        {
+            instance = this;
+            //DontDestroyOnLoad(gameObject);
+        }
+    }
+
+    private static GameManager instance = null;
+    private static EventManager events = null;
+    private static LoadAndSaveManager loadSave = null;
+    private float timeSinceLevelStart = 0;
+    private int score = 0;
+    AdWrapper adWrapper;
 
 
-     public void SwitchLevel(int LevelNumber)
-     {
-          Application.LoadLevel(LevelNumber);
-     }
+    // Use this for initialization
+    void Start()
+    {
+        /*
+        adWrapper = new AdWrapper();
+        adWrapper.RequestBannerAd();
+         * */
+        Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.PlayerDeath);
+        Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.PlayerLeftGround);
+    }
 
-     public void RestartLevel()
-     {
-          //this is the problem with the game not restarting...
-          //Find solution or restart level by reseting varaibles.
-          GameManager.Events.CallEvent(EventManager.EventTypes.RestartGame);
-     }
 
-     public void ExitGame()
-     {
-          Application.Quit();
-     }
+    public void SwitchLevel(int LevelNumber)
+    {
+        Application.LoadLevel(LevelNumber);
+    }
 
-     public void OnEventOccurred(EventManager.EventTypes typeOfEvent)
-     {
-          if(typeOfEvent == EventManager.EventTypes.PlayerDeath)
-          {
-               Debug.Log("Player Has died");
-          }
-     }
+    public void RestartLevel()
+    {
+        SwitchLevel(0);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    public void OnEventOccurred(EventManager.EventTypes typeOfEvent)
+    {
+        if (typeOfEvent == EventManager.EventTypes.PlayerDeath)
+        {
+            Debug.Log("Player Has died");
+        }
+        if(typeOfEvent == EventManager.EventTypes.PlayerLeftGround)
+        {
+            timeSinceLevelStart = Time.time;
+        }
+    }
+
+    public float GetLevelTime()
+    {
+        return timeSinceLevelStart;
+    }
+
+    public int CalculateScore()
+    {
+        score = (int)(Time.time - timeSinceLevelStart) * 10;
+        return score;
+    }
+
+    public void SaveHighScore()
+    {
+        if(CheckForNewHighScore())
+        {
+            loadSave.SaveHighScore(score);
+        }
+    }
+
+    public bool CheckForNewHighScore()
+    {
+        if(score > GetHighScore())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public int GetHighScore()
+    {
+        return loadSave.GetScore();
+    }
 }
 
