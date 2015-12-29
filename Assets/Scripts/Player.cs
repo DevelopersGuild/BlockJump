@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     private bool isPlayerOffGround = false;
     private bool isPlayerDead = false;
     private Vector3 playerStartPosistion;
+    private Animator playerAnimator;
     int min = -13;
     int max = 13;
 
@@ -24,6 +25,7 @@ public class Player : MonoBehaviour
         playerRigidBody = gameObject.GetComponent<Rigidbody2D>();
         jumpCounter = 0;
         playerStartPosistion = gameObject.transform.position;
+        playerAnimator = gameObject.GetComponent<Animator>();
         GameManager.Events.AddEventListner(OnEventOccurred, EventManager.EventTypes.RestartGame);
     }
     void Update()
@@ -91,6 +93,20 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(min, transform.position.y, 0);
         }
+        if (movementDirection.x != 0)
+        {
+            FlipSprite(movementDirection.x >= 0 ? 1 : -1);
+            playerAnimator.SetBool("IsMoving", true);
+        }
+        else
+        {
+            playerAnimator.SetBool("IsMoving", false);
+        }
+    }
+
+    private void FlipSprite(int directionToFace)
+    {
+        transform.localScale = new Vector3(directionToFace, 1, 1);
     }
 
     private void JumpPlayer()
@@ -98,6 +114,7 @@ public class Player : MonoBehaviour
         if (jumpCounter < ConsecutiveJumpsAllowed)
         {
             playerRigidBody.AddForce(new Vector2(0f, JumpHeight));
+            playerAnimator.SetBool("IsJumping", true);
             jumpCounter++;
         }
     }
@@ -108,6 +125,7 @@ public class Player : MonoBehaviour
         {
             ResetJumpCounter();
             Speed = Speed / 2;
+            playerAnimator.SetBool("IsJumping", false);
         }
         if (collision.gameObject.tag == "Ground")
         {
